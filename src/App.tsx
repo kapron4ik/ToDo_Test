@@ -14,7 +14,7 @@ export type TodolistsType = {
     filter: FilterValueType
 }
 
-type TaskStateType = {
+export type TaskStateType = {
     [key: string]: Array<TaskType>
 }
 
@@ -58,24 +58,6 @@ function App() {
         }
     }
 
-    function changeStatus(id: string, isDone: boolean, todolistId: string) {
-        let todolistTasks = tasks[todolistId];
-        let task = todolistTasks.find(t => t.id === id)
-        if (task) {
-            task.isDone = isDone;
-            setTasks({...tasks})
-        }
-    }
-
-    function renameTask(id: string, newTitle: string, todolistId: string) {
-        let todolistTasks = tasks[todolistId];
-        let task = todolistTasks.find(t => t.id === id)
-        if (task) {
-            task.title = newTitle;
-            setTasks({...tasks})
-        }
-    }
-
     function renameTodoList(newTitle: string, todolistId: string) {
         let todolist = todolists.find(tl => tl.id === todolistId);
         if (todolist) {
@@ -91,6 +73,12 @@ function App() {
         setTasks({...tasks, [newTodoListId]: []})
     }
 
+    function removeTodoList(todolistId: string) {
+        setTodolists(todolists.filter(t => t.id !== todolistId));
+        delete tasks[todolistId];
+        setTasks({...tasks})
+    }
+
     function addTask(title: string, todolistId: string) {
         let task = {id: v1(), title: title, isDone: false};
         let todolistTasks = tasks[todolistId];
@@ -104,10 +92,22 @@ function App() {
         setTasks({...tasks})
     }
 
-    function removeTodoList(todolistId: string) {
-        setTodolists(todolists.filter(t => t.id !== todolistId));
-        delete tasks[todolistId];
-        setTasks({...tasks})
+    function renameTask(id: string, newTitle: string, todolistId: string) {
+        let todolistTasks = tasks[todolistId];
+        let task = todolistTasks.find(t => t.id === id)
+        if (task) {
+            task.title = newTitle;
+            setTasks({...tasks})
+        }
+    }
+
+    function changeStatus(id: string, isDone: boolean, todolistId: string) {
+        let todolistTasks = tasks[todolistId];
+        let task = todolistTasks.find(t => t.id === id)
+        if (task) {
+            task.isDone = isDone;
+            setTasks({...tasks})
+        }
     }
 
     return (
