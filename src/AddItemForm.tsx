@@ -1,12 +1,14 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {Button, IconButton, TextField} from "@material-ui/core";
+import {IconButton, TextField} from "@material-ui/core";
 import {AddBox} from "@material-ui/icons";
 
 type PropsType = {
     addItem: (title: string) => void
 }
 
-const AddItemForm = (props: PropsType) => {
+// оборачиваю компоненту в React.memo для того что бы не было перерисвоки компоненты
+// если ее пропсы не изменяются
+export const AddItemForm = React.memo((props: PropsType) => {
     let [title, setTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
 
@@ -22,9 +24,10 @@ const AddItemForm = (props: PropsType) => {
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
-
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
+        if (error !== null){
+            setError(null);
+        }
         if (e.charCode === 13) {
             addItem();
         }
@@ -45,6 +48,4 @@ const AddItemForm = (props: PropsType) => {
             </IconButton>
         </div>
     );
-};
-
-export default AddItemForm;
+});

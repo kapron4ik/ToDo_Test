@@ -1,4 +1,4 @@
-import {FilterValueType, TodolistsType} from "../App";
+import {FilterValueType, TodolistsType} from "../AppWithRedux";
 import {v1} from "uuid";
 
 
@@ -31,28 +31,38 @@ export type ChangeTodolistFilterActionType = {
     filter: FilterValueType
 }
 
-export const todolistsReducer = (state: Array<TodolistsType>, action: ActionType):Array<TodolistsType> => {
+const initialState: Array<TodolistsType> = [];
+
+export const todolistsReducer = (state: Array<TodolistsType> = initialState, action: ActionType): Array<TodolistsType> => {
     switch (action.type) {
-        case 'REMOVE-TODOLIST':
-            return state.filter(t => t.id !== action.id);
-        case 'ADD-TODOLIST':
+        case 'REMOVE-TODOLIST': {
+            const stateCopy = [...state];
+            return stateCopy.filter(t => t.id !== action.id);
+        }
+        case 'ADD-TODOLIST': {
+            const stateCopy = [...state];
             let newTodoListId = action.todolistId;
             let newTodoList: TodolistsType = {id: newTodoListId, title: action.title, filter: "all"}
-            return [...state, newTodoList];
-        case 'CHANGE-TODOLIST-TITLE':
-            let todolist = state.find(tl => tl.id === action.id)
+            return [...stateCopy, newTodoList];
+        }
+        case 'CHANGE-TODOLIST-TITLE': {
+            const stateCopy = [...state];
+            let todolist = stateCopy.find(tl => tl.id === action.id)
             if (todolist) {
                 todolist.title = action.title;
             }
-            return state;
-        case 'CHANGE-TODOLIST-FILTER':
-            let todolist1 = state.find(tl => tl.id === action.id)
-            if (todolist1) {
-                todolist1.filter = action.filter;
+            return stateCopy;
+        }
+        case 'CHANGE-TODOLIST-FILTER': {
+            const stateCopy = [...state];
+            let todolist = stateCopy.find(tl => tl.id === action.id)
+            if (todolist) {
+                todolist.filter = action.filter;
             }
-            return state;
+            return stateCopy;
+        }
         default:
-            throw new Error("I don't understand this type")
+            return state
     }
 }
 
