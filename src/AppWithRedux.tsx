@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import './App.css';
 import Todolist, {TaskType} from "./Todolist";
-import AddItemForm from "./AddItemForm";
+import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import {
@@ -23,6 +23,7 @@ export type TaskStateType = {
 }
 
 function AppWithRedux() {
+    console.log("App is called")
 
     const todolists = useSelector<AppRootStateType, Array<TodolistsType>>(state => state.todolists)
     const dispatch = useDispatch();
@@ -32,7 +33,7 @@ function AppWithRedux() {
     const addTodoList = useCallback((title: string) => {
         const action = addTodolistAC(title);
         dispatch(action);
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="App">

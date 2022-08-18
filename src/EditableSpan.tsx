@@ -6,7 +6,7 @@ type PropsTypeSpan = {
     onChange: (newValue: string) => void
 }
 
-export const EditableSpan = (props: PropsTypeSpan) => {
+export const EditableSpan = React.memo((props: PropsTypeSpan) => {
     let [editMode, setEditMode] = useState<boolean>(false)
     let [title, setTitle] = useState<string>(props.value)
 
@@ -17,25 +17,21 @@ export const EditableSpan = (props: PropsTypeSpan) => {
             setTitle(props.value)
         }
     };
-
     const activateEditMode = () => {
         setEditMode(true)
         setTitle(props.value)
     }
-
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.charCode === 13) {
             setEditMode(false)
             addItem();
         }
     }
-
     const activateViewMode = () => {
         setEditMode(false);
         addItem()
         // props.onChange(title)
     }
-
     const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
@@ -48,4 +44,4 @@ export const EditableSpan = (props: PropsTypeSpan) => {
                      autoFocus
                      onBlur={activateViewMode}/>
         : <span onDoubleClick={activateEditMode}>{title}</span>
-}
+})
